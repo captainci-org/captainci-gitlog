@@ -1,3 +1,6 @@
+# gitlog
+.captainci-deb-gitlog.*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
