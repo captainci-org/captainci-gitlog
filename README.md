@@ -1,0 +1,2 @@
+# captainci-gitlog
+git log
