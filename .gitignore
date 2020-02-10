@@ -1,5 +1,6 @@
 # gitlog
 .captainci-deb-gitlog.*
+.captainci-deb-gitlog-commit.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
