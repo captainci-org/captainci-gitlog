@@ -69,6 +69,9 @@ class GitLog:
 		self.debug('cmd shell: %s' % cmd)
 		out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
 
+		if out:
+			out = str(out)
+
 		self.debug('cmd out: %s' % out)
 		return out
 
