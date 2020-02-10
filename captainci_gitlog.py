@@ -37,7 +37,7 @@ class GitLog:
 	""" gitlog object """
 
 	def __init__(self):
-		""" init """
+		""" Init """
 
 		# debug
 		self.debug_mode = 1
@@ -64,7 +64,7 @@ class GitLog:
 
 
 	def command(self, cmd):
-		""" command """
+		""" Command """
 
 		self.debug('cmd shell: %s' % cmd)
 		out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
@@ -74,7 +74,7 @@ class GitLog:
 
 
 	def debug(self, msg):
-		""" debug """
+		""" Debug """
 
 		if self.debug_mode:
 			print('[debug] %s' % msg)
@@ -84,7 +84,7 @@ class GitLog:
 
 
 	def __read(self):
-		""" read config """
+		""" Read config """
 
 		# git config
 		if os.path.isfile(GIT_CONFIG):
@@ -122,7 +122,7 @@ class GitLog:
 
 
 	def __history(self):
-		""" git history """
+		""" Git history """
 
 		# git history
 		fwrite = {}
@@ -214,7 +214,7 @@ class GitLog:
 
 
 	def __write(self, write_no):
-		""" write """
+		""" Write """
 
 		for file_type in self.file_types:
 			self.__write_type(file_type, write_no)
@@ -223,7 +223,7 @@ class GitLog:
 
 
 	def __write_type(self, file_type, write_no):
-		""" write """
+		""" Write """
 
 		fwrite = open('.captainci-deb-gitlog-commit.%s' % file_type, 'w')
 		fwrite.write('%s %s\n' % (self.package['name'], self.package['version']))
@@ -239,7 +239,7 @@ class GitLog:
 
 
 	def run(self):
-		""" run """
+		""" Run """
 
 		self.__read()
 		write_no = self.__history()
