@@ -34,10 +34,10 @@ DEBIAN_CHANGELOG = 'debian/changelog'
 GIT_CONFIG = '.git/config'
 
 class GitLog:
-	""" gitlog object """
+	"""Gitlog object."""
 
 	def __init__(self):
-		"""Init."""
+		"""Init object."""
 
 		# debug
 		self.debug_mode = 1
@@ -64,7 +64,7 @@ class GitLog:
 
 
 	def command(self, cmd):
-		"""Command."""
+		"""Shell command."""
 
 		self.debug('cmd shell: %s' % cmd)
 		out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
@@ -223,7 +223,7 @@ class GitLog:
 
 
 	def __write_type(self, file_type, write_no):
-		"""Write."""
+		"""Write by type."""
 
 		fwrite = open('.captainci-deb-gitlog-commit.%s' % file_type, 'w')
 		fwrite.write('%s %s\n' % (self.package['name'], self.package['version']))
@@ -239,7 +239,7 @@ class GitLog:
 
 
 	def run(self):
-		""" Run """
+		"""Run script."""
 
 		self.__read()
 		write_no = self.__history()
