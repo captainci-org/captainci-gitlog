@@ -30,7 +30,7 @@ elif [ -f "/etc/debian_version" ]; then
 
 # other
 elif [ -f "/etc/os-release" ]; then
-	DISTNAME=`cat /etc/os-release  | grep -v "_ID=" | grep "ID=" | cut -d"=" -f2`;
+	DISTNAME=$(cat /etc/os-release  | grep -v "_ID=" | grep "ID=" | cut -d"=" -f2);
 	DISTFILE="/etc/os-release";
 	
 else
