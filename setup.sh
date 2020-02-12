@@ -5,7 +5,7 @@ GIT_OWNER="captainci-org"
 TMP_DIR="/tmp/${GIT_REPO}"
 INST_DIR="/opt/captainci"
 
-echo "start ... "
+echo "${GIT_REPO}: start ... "
 echo
 
 # redhat
@@ -38,7 +38,7 @@ else
 	exit;
 fi
 
-echo "distribution ... "
+echo "${GIT_REPO}: distribution ... "
 echo "* name: $DISTNAME ";
 echo -n "* version: "
 cat $DISTFILE 
@@ -69,29 +69,29 @@ echo "${GIT_REPO} ... "
 echo -n "* clean ... "
 sudo rm -rf $TMP_DIR
 sudo rm -f /usr/bin/$GIT_REPO
-echo "done."
+echo " done."
 
 echo -n "* git clone ... "
 git clone -q https://github.com/${GIT_OWNER}/${GIT_REPO}.git
-echo "done."
+echo " done."
 
 echo -n "* create dirs ... "
 sudo mkdir -p $INST_DIR/bin/
-echo "done."
+echo " done."
 
 echo -n "* script install ... "
-sudo cp -v $TMP_DIR/*.py $INST_DIR/bin/.
+sudo cp -v $TMP_DIR/*.py $INST_DIR/bin/. | tr -d '\n'
 sudo chmod 755 $INST_DIR/bin/*.py
-echo "done."
+echo " done."
 
 echo -n "* symlink install ... "
 rm -f /usr/bin/$GIT_REPO
 ln -s $INST_DIR/bin/captainci_gitlog.py /usr/bin/$GIT_REPO
-echo "done."
+echo " done."
 
-echo -n "* clean ... "
+echo -n "${GIT_REPO}: * clean ... "
 sudo rm -rf $TMP_DIR
-echo "done."
+echo " done."
 
 echo
-echo "end."
+echo "${GIT_REPO}: finish."
