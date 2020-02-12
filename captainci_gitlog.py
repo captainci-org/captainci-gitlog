@@ -48,17 +48,23 @@ class GitLog:
 		# package name + version
 		self.package = {'name':'unknown', 'version':0, 'fullname':'unknown 0'}
 		if os.path.isfile(DEBIAN_CHANGELOG):
-			pckgs = self.command('head -n1 %s | cut -d" " -f1,2' % DEBIAN_CHANGELOG)
+			pckgs = self.command(\
+				'head -n1 %s | cut -d" " -f1,2 | cut -d")" -f1' % DEBIAN_CHANGELOG).replace('\n', '')
+			self.debug('pckgs="%s"' % pckgs)
 			self.package = {'name':pckgs.split()[0], 'version':pckgs.split()[1], 'fullname':pckgs}
+
+			if self.package['name'][:2] == "b'":
+				self.package['name'] = self.package['name'][2:]
 
 		# version + 1
 		try:
-			_vers = self.package.get('version', 0)[1:-1].split('.')
+			_vers = self.package.get('version', '0.0.0')[1:-1].split('.')
 			self.package['version'] = '(%s.%s.%s)' % \
 				(int(_vers[0]), int(_vers[1]), int(_vers[2].split('+')[0])+1)
 		except BaseException as base_err:
 			self.debug('version err="%s"' % base_err)
 
+		self.debug('version="%s"' % self.package['version'])
 		self.url = ''
 
 
@@ -70,7 +76,7 @@ class GitLog:
 		out = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
 
 		if out:
-			out = str(out)
+			out = str(out).replace('\\n', '\n')
 
 		self.debug('cmd out: %s' % out)
 		return out
@@ -137,6 +143,7 @@ class GitLog:
 		write_no = 0
 
 		outs = self.command('git log --no-decorate --source').split('\ncommit ')
+		self.debug('git log len=%s, output=%s' % (len(outs), outs))
 		for lines in outs:
 
 			if not lines:
@@ -167,6 +174,7 @@ class GitLog:
 					continue
 
 				if line.startswith("* commit '"):
+					self.debug('commit line=%s' % line)
 					continue
 
 				for name_break in (self.package['fullname'],\
@@ -198,12 +206,12 @@ class GitLog:
 						commit_url['txt'] = ' %s/commit/%s' % (self.url, git_commit_hash)
 
 
-					self.debug('  %s%s' % (line, commit_url['md']))
+					self.debug('changelog:  %s%s' % (line, commit_url['md']))
 					for file_type in self.file_types:
 						fwrite[file_type].write('  %s%s\n' % (line, commit_url[file_type]))
 
 				else:
-					self.debug('  %s' % line)
+					self.debug('changelog:  %s' % line)
 					for file_type in self.file_types:
 						fwrite[file_type].write('  %s\n' % line)
 

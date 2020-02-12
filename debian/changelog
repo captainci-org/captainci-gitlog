@@ -1,0 +1,12 @@
+captainci-gitlog (0.1.31) unstable; urgency=low
+
+  * Added: package
+
+ -- Ubox deploy <deploy+uboxapi@4.house>  Wed, 12 Feb 2020 11:04:36 +0100
+
+captainci-gitlog (0.1.30) unstable; urgency=low
+
+  * Added: gitlog package
+
+ -- Erik Brozek <erik@4.house>  Fri, 1 Jan 2020 02:03:04 +0200
+
