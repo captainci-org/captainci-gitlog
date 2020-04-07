@@ -85,8 +85,8 @@ sudo chmod 755 $INST_DIR/bin/*.py
 echo " done."
 
 echo -n "* symlink install ... "
-rm -f /usr/bin/$GIT_REPO
-ln -s $INST_DIR/bin/captainci_gitlog.py /usr/bin/$GIT_REPO
+sudo rm -f /usr/bin/$GIT_REPO
+sudo ln -s $INST_DIR/bin/captainci_gitlog.py /usr/bin/$GIT_REPO
 echo " done."
 
 echo -n "${GIT_REPO}: * clean ... "
