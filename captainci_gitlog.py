@@ -7,7 +7,7 @@ Gitlog script
 
 # ########################## Copyrights and license ############################
 #                                                                              #
-# Copyright 2017-2019 Erik Brozek <erik@brozek.name>                           #
+# Copyright 2017-2022 Erik Brozek <erik@brozek.name>                           #
 #                                                                              #
 # This file is part of CaptainCI.                                              #
 # http://www.captainci.com                                                     #
@@ -94,10 +94,11 @@ class GitLog:
 
 	def __read(self):
 		"""Read config."""
+		# pylint: disable=unreachable
 
 		# git config
 		if os.path.isfile(GIT_CONFIG):
-			return
+			return False
 
 		config = open(GIT_CONFIG).read().split('\n')
 		sections = {}
@@ -132,6 +133,8 @@ class GitLog:
 
 	def __history(self):
 		"""GIT history."""
+		# pylint: disable=too-many-branches
+		# pylint: disable=too-many-statements
 
 		# git history
 		fwrite = {}
@@ -152,17 +155,21 @@ class GitLog:
 			if line_break:
 				break
 
-			git_commit_hash = ''
-			lines_arr = lines.split('\n')
-			line_cnt = len(lines_arr)
-			if line_cnt > 0:
-				git_commit_hash = lines_arr[0].split('\t')[0]
+			__lines = {\
+				'git_commit_hash': '',\
+				'arr': lines.split('\n'),\
+				'cnt': 0,\
+			}
+			__lines['cnt'] = len(__lines['arr'])
 
-				if git_commit_hash.startswith('commit '):
-					git_commit_hash = git_commit_hash[7:]
+			if __lines['cnt'] > 0:
+				__lines['git_commit_hash'] = __lines['arr'][0].split('\t')[0]
+
+				if __lines['git_commit_hash'].startswith('commit '):
+					__lines['git_commit_hash'] = __lines['git_commit_hash'][7:]
 
 			line_no = 0
-			for line in lines_arr:
+			for line in __lines['arr']:
 				if not line:
 					continue
 
@@ -199,11 +206,17 @@ class GitLog:
 						commit_url[file_type] = ''
 
 					if self.url != '':
-						commit_url['md'] = ' [#%s](%s/commit/%s)' % (git_commit_hash, self.url, git_commit_hash)
-						commit_url['jira'] = ' [#%s|%s/commit/%s]' % (git_commit_hash, self.url, git_commit_hash)
-						commit_url['html'] = ' <a href="%s/commit/%s">#%s</a>' % \
-							(self.url, git_commit_hash, git_commit_hash)
-						commit_url['txt'] = ' %s/commit/%s' % (self.url, git_commit_hash)
+						commit_url['md'] = ' [#%s](%s/commit/%s)' % (\
+							__lines['git_commit_hash'], self.url,\
+							__lines['git_commit_hash'])
+						commit_url['jira'] = ' [#%s|%s/commit/%s]' % (\
+							__lines['git_commit_hash'], self.url,\
+							__lines['git_commit_hash'])
+						commit_url['html'] = ' <a href="%s/commit/%s">#%s</a>' % (\
+							self.url, __lines['git_commit_hash'],\
+							__lines['git_commit_hash'])
+						commit_url['txt'] = ' %s/commit/%s' % (\
+							self.url, __lines['git_commit_hash'])
 
 
 					self.debug('changelog:  %s%s' % (line, commit_url['md']))
@@ -242,7 +255,13 @@ class GitLog:
 		if write_no == 0:
 			fwrite.write('  * without changes')
 		else:
-			fwrite.write('%s' % open('.captainci-deb-gitlog.%s' % file_type, 'r').read())
+			content = open('.captainci-deb-gitlog.%s' % file_type, 'r').read()
+			if file_type == 'html':
+				content = content.replace('*', '<li>')
+			print('----')
+			print(content)
+			print('----')
+			fwrite.write('%s' % content)
 
 		fwrite.close()
 
