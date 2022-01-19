@@ -250,18 +250,17 @@ class GitLog:
 		"""Write by type."""
 
 		fwrite = open('.captainci-deb-gitlog-commit.%s' % file_type, 'w')
-		fwrite.write('%s %s\n' % (self.package['name'], self.package['version']))
+		#fwrite.write('%s %s\n' % (self.package['name'], self.package['version']))
 
 		if write_no == 0:
-			fwrite.write('  * without changes')
+			content = '* without changes'
 		else:
 			content = open('.captainci-deb-gitlog.%s' % file_type, 'r').read()
-			if file_type == 'html':
-				content = content.replace('*', '<li>')
-			print('----')
-			print(content)
-			print('----')
-			fwrite.write('%s' % content)
+
+		if file_type == 'html':
+			content = content.replace('*', '<li>').replace('\n', '.')
+
+		fwrite.write('%s' % content)
 
 		fwrite.close()
 
